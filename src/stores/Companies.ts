@@ -1,9 +1,11 @@
+import { useLocalStorage } from '@vueuse/core'
 import { defineStore } from 'pinia'
+import type { MaybeRef } from 'vue'
 import { useGet } from '~/composables/api'
 import type { Asset, Company, Location } from '~/models/Companies'
-import type { Resource } from '~/models/Resource'
 
 interface State {
+  company: MaybeRef,
   companies: Company[],
   locations: Location[],
   assets: Asset[],
@@ -11,6 +13,7 @@ interface State {
 
 export const useCompany = defineStore('company', {
   state: (): State => ({
+    company: useLocalStorage('tractian-selected-company', ''),
     companies: [],
     locations: [],
     assets: [],
@@ -24,15 +27,20 @@ export const useCompany = defineStore('company', {
       )
     },
     setCompanies() {
-      return (response: Resource<Company[]>) => {
-        const data = response.data
-
-        if (data) {
-          this.$state.companies = data
+      return (response: Company[]) => {
+        if (response) {
+          this.$state.companies = response
         }
 
         return response
       }
+    },
+    setCompany(company: string) {
+      if (!company) {
+        return
+      }
+
+      this.$state.company = company
     }
   }
 })
