@@ -1,5 +1,9 @@
 <script setup lang="ts">
+interface Props {
+  options: string[]
+}
 
+defineProps<Props>()
 </script>
 
 <template>
@@ -7,25 +11,13 @@
     <Logo class="w-1/10 ml-5 w-[106px] h-[14px]" />
     <div class="flex items-center justify-center gap-2 p-3 text-sm">
       <RouterLink
+        v-for="(option, index) in options"
+        :key="index"
         :class="$route.path === '/' ? 'bg-primary' : 'bg-secondary'"
         class="p-1 px-3 text-white"
         to="/"
       >
-        Apex Unit
-      </RouterLink>
-      <RouterLink
-        :class="$route.path === '/aa' ? 'bg-primary' : 'bg-secondary'"
-        class=" p-1 px-3 text-white"
-        to="/"
-      >
-        Tobias Unit
-      </RouterLink>
-      <RouterLink
-        :class="$route.path === '/aaa' ? 'bg-primary' : 'bg-secondary'"
-        class="p-1 px-3 text-white"
-        to="/"
-      >
-        Jaguar Unit
+        {{ option }}
       </RouterLink>
     </div>
   </div>
